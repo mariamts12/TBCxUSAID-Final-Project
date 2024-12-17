@@ -24,7 +24,7 @@ SECRET_KEY = "django-insecure-crhi2jaq_n=kw(x2iw$!kk+39ovoiv8o&fzzdtjlo++jk6kz$p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "drf_yasg",
     "django_filters",
+    "celery",
+    "user",
 ]
 
 MIDDLEWARE = [
@@ -114,23 +116,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static_common"
-STATICFILES_DIRS = [BASE_DIR / "static"]
+# STATIC_ROOT = BASE_DIR / "static_common"
+# STATICFILES_DIRS = [BASE_DIR / "static"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-REST_FRAMEWORK = {
-    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-    ),
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
-}
 
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
@@ -144,4 +136,23 @@ SWAGGER_SETTINGS = {
     # 'JSON_EDITOR': True,
 }
 
-# AUTH_USER_MODEL = "user_app.User"
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": ("django_filters.rest_framework.DjangoFilterBackend",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 10,
+}
+
+AUTH_USER_MODEL = "user.User"
+
+# # set the celery broker url
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+#
+# # set the celery result backend
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+#
+# # set the celery timezone
+# CELERY_TIMEZONE = 'UTC'
