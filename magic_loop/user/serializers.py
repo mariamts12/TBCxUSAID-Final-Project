@@ -1,6 +1,6 @@
 from rest_framework import serializers
-
 from .models import User
+from .tasks import send_sign_up_mail
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -30,7 +30,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         password = attrs.get('password')
         verify_password = attrs.get('verify_password')
         if password != verify_password:
-            raise serializers.ValidationError("Passwords don't match")
+            raise serializers.ValidationError("Passwords don't match. Try again.")
         return attrs
 
     def create(self, validated_data):
@@ -40,4 +40,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data["password"])
         user.save()
+
+        send_sign_up_mail.delay(user.email, user.username)
         return user

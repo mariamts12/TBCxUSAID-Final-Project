@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -148,11 +150,19 @@ REST_FRAMEWORK = {
 
 AUTH_USER_MODEL = "user.User"
 
-# # set the celery broker url
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-#
-# # set the celery result backend
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-#
-# # set the celery timezone
-# CELERY_TIMEZONE = 'UTC'
+# set the celery broker url
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# set the celery result backend
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# set the celery timezone
+CELERY_TIMEZONE = 'UTC'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # sender's email-id
+EMAIL_HOST_PASSWORD = config(
+    'EMAIL_HOST_PASSWORD')  # password associated with above email-id (not the regular password)
