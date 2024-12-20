@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Post, Comment, Tag, Feedback
+from .models import Post, Comment, Tag, Feedback, LikePost
 
 
 @admin.register(Post)
@@ -12,10 +12,10 @@ class PostAdmin(admin.ModelAdmin):
     list_per_page = 15
 
 
-# @admin.register(PostImage)
-# class PostImageAdmin(admin.ModelAdmin):
-#     list_display = ("post", "image")
-#     search_fields = ("post",)
+@admin.register(LikePost)
+class LikePostAdmin(admin.ModelAdmin):
+    list_display = ("user", "post")
+    search_fields = ("post__id",)
 
 
 @admin.register(Comment)
