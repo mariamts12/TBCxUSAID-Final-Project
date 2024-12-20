@@ -24,6 +24,7 @@ from .swagger import schema_view
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("user/", include("user.urls"), name="user"),
+    path("community/", include("community.urls"), name="community"),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

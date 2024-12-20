@@ -13,6 +13,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
+    image = models.ImageField(upload_to='post_images/', null=True, blank=True)
     tag = models.ManyToManyField(to=Tag, related_name="posts", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -21,16 +22,28 @@ class Post(models.Model):
         return self.comments.count()
 
     @property
-    def has_pinned_answer(self) -> bool:
+    def likes_count(self) -> int:
+        return self.likes.count()
+
+    @property
+    def has_pinned_comment(self) -> bool:
         return self.comments.filter(is_pinned=True).exists()
 
     def __str__(self):
         return f"{self.id}. {self.title}"
 
 
-class PostImage(models.Model):
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="images")
-    image = models.ImageField(upload_to='post_images/')
+# class PostImage(models.Model):
+#     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="images")
+#     image = models.ImageField(upload_to='post_images/')
+
+
+class LikePost(models.Model):
+    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("user", "post")
 
 
 class Comment(models.Model):

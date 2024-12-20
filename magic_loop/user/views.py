@@ -10,7 +10,6 @@ from utils.serializer_factory import SerializerFactory
 
 
 class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.DestroyModelMixin,
                   mixins.ListModelMixin,
                   GenericViewSet):
     queryset = User.objects.all()
