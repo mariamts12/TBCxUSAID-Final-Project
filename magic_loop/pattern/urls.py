@@ -1,7 +1,13 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import PatternTagViewSet, PatternViewSet, CategoryViewSet, MaterialViewSet, YarnTypeViewSet
+from .views import (
+    PatternTagViewSet,
+    PatternViewSet,
+    CategoryViewSet,
+    MaterialViewSet,
+    YarnTypeViewSet,
+)
 
 app_name = "patterns"
 

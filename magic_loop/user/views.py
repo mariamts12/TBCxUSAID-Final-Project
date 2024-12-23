@@ -4,16 +4,13 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from pattern.serializers import PatternSerializer
 from .models import User
 from .serializers import DetailUserSerializer, UserSerializer, CreateUserSerializer
 from utils.serializer_factory import SerializerFactory
 
 
-class UserViewSet(mixins.RetrieveModelMixin,
-                  mixins.ListModelMixin,
-                  GenericViewSet):
-    queryset = User.objects.prefetch_related("saved_patterns", "patterns")
+class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
+    queryset = User.objects.prefetch_related("saved_patterns", "patterns", "projects")
     permission_classes = [IsAuthenticated]
 
     serializer_class = SerializerFactory(

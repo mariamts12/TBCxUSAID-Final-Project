@@ -13,10 +13,12 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     content = models.TextField()
-    image = models.ImageField(upload_to='post_images/', null=True, blank=True)
+    image = models.ImageField(upload_to="post_images/", null=True, blank=True)
     tag = models.ManyToManyField(to=Tag, related_name="posts", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="liked_posts")
+    likes = models.ManyToManyField(
+        to=settings.AUTH_USER_MODEL, related_name="liked_posts"
+    )
 
     @property
     def comment_count(self) -> int:
@@ -38,9 +40,7 @@ class Comment(models.Model):
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments"
     )
-    post = models.ForeignKey(
-        Post, on_delete=models.CASCADE, related_name="comments"
-    )
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     is_pinned = models.BooleanField(default=False)

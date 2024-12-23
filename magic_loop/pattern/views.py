@@ -11,8 +11,12 @@ from rest_framework.viewsets import GenericViewSet
 from .filtersets import PatternFilter, BasePatternFilter
 from .models import Category, Pattern, PatternTag, Material, YarnType
 from .serializers import (
-    PatternTagSerializer, PatternSerializer, PatternDetailSerializer,
-    AddPatternSerializer, DetailCategorySerializer, MaterialSerializer
+    PatternTagSerializer,
+    PatternSerializer,
+    PatternDetailSerializer,
+    AddPatternSerializer,
+    DetailCategorySerializer,
+    MaterialSerializer,
 )
 from utils.serializer_factory import SerializerFactory
 
@@ -36,10 +40,9 @@ class PatternViewSet(
     mixins.DestroyModelMixin,
     GenericViewSet,
 ):
-    queryset = (
-        Pattern.objects.prefetch_related("tag", "category", "materials", "yarn_type", "saved", "category__subcategories")
-        .select_related("author")
-    )
+    queryset = Pattern.objects.prefetch_related(
+        "tag", "category", "materials", "yarn_type", "saved", "category__subcategories"
+    ).select_related("author")
     permission_classes = [IsAuthenticated]
 
     serializer_class = SerializerFactory(
@@ -56,10 +59,10 @@ class PatternViewSet(
 
         if self.action == "saved_patterns":
             qs = qs.filter(saved=self.request.user)
-            qs = qs.annotate(count_saved=Count('saved'))
+            qs = qs.annotate(count_saved=Count("saved"))
             return qs
 
-        return qs.annotate(count_saved=Count('saved')).order_by("-created_at")
+        return qs.annotate(count_saved=Count("saved")).order_by("-created_at")
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -119,7 +122,7 @@ class PatternViewSet(
             return Response(cached)
 
         qs = self.get_queryset()
-        qs = qs.order_by('-count_saved')[:15]
+        qs = qs.order_by("-count_saved")[:15]
 
         serializer = self.get_serializer(qs, many=True)
         serialized_data = serializer.data
@@ -130,12 +133,12 @@ class PatternViewSet(
 
 
 class CategoryViewSet(mixins.ListModelMixin, GenericViewSet):
-    queryset = Category.objects.select_related("parent").prefetch_related("subcategories")
+    queryset = Category.objects.select_related("parent").prefetch_related(
+        "subcategories"
+    )
     permission_classes = [IsAuthenticated]
 
-    serializer_class = SerializerFactory(
-        default=DetailCategorySerializer
-    )
+    serializer_class = SerializerFactory(default=DetailCategorySerializer)
 
 
 class MaterialViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, GenericViewSet):

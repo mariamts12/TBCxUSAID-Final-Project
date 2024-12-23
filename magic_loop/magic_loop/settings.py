@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     "user",
     "community",
     "pattern",
-    "projects"
+    "projects",
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,7 @@ MIDDLEWARE = [
 ]
 
 INTERNAL_IPS = [
-    '127.0.0.1',
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = "magic_loop.urls"
@@ -130,8 +130,8 @@ STATIC_URL = "static/"
 # STATIC_ROOT = BASE_DIR / "static_common"
 # STATICFILES_DIRS = [BASE_DIR / "static"]
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -170,18 +170,19 @@ CACHES = {
 AUTH_USER_MODEL = "user.User"
 
 # set the celery broker url
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BROKER_URL = "redis://localhost:6379/0"
 
 # set the celery result backend
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
 
 # set the celery timezone
-CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = "UTC"
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # sender's email-id
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")  # sender's email-id
 EMAIL_HOST_PASSWORD = config(
-    'EMAIL_HOST_PASSWORD')  # password associated with above email-id (not the regular password)
+    "EMAIL_HOST_PASSWORD"
+)  # password associated with above email-id (not the regular password)

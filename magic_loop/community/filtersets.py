@@ -7,7 +7,9 @@ from .models import Post
 class PostFilter(django_filters.FilterSet):
     search = django_filters.CharFilter(method="filter_search", label="Search")
     tag_id = django_filters.NumberFilter(field_name="tag__id", label="Tag ID")
-    personal = django_filters.BooleanFilter(method="filter_personal", label="Personal posts")
+    personal = django_filters.BooleanFilter(
+        method="filter_personal", label="Personal posts"
+    )
 
     class Meta:
         model = Post

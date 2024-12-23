@@ -5,20 +5,27 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from .filtersets import ProjectFilter
 from .models import Project
-from .serializers import ProjectSerializer, CreateProjectSerializer, ProjectDetailSerializer, UpdateProjectSerializer, \
-    ImageSerializer
+from .serializers import (
+    ProjectSerializer,
+    CreateProjectSerializer,
+    ProjectDetailSerializer,
+    UpdateProjectSerializer,
+    ImageSerializer,
+)
 from utils.serializer_factory import SerializerFactory
 
 
-class ProjectViewSet(mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin,
-                     mixins.ListModelMixin,
-                     mixins.DestroyModelMixin,
-                     GenericViewSet):
+class ProjectViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    GenericViewSet,
+):
     queryset = Project.objects.all()
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
@@ -27,7 +34,7 @@ class ProjectViewSet(mixins.CreateModelMixin,
     serializer_class = SerializerFactory(
         default=ProjectSerializer,
         retrieve=ProjectDetailSerializer,
-        create=CreateProjectSerializer
+        create=CreateProjectSerializer,
     )
 
     def perform_create(self, serializer):
@@ -44,13 +51,16 @@ class ProjectViewSet(mixins.CreateModelMixin,
         permission_classes=[IsAuthenticated],
         serializer_class=UpdateProjectSerializer,
         url_name="update",
-        url_path="update"
+        url_path="update",
     )
     def update_project(self, request, pk=None):
         instance = self.get_object()
 
         if request.user != instance.user:
-            return Response({"detail": "You do not have permission to modify this project."}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"detail": "You do not have permission to modify this project."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 
@@ -66,13 +76,19 @@ class ProjectViewSet(mixins.CreateModelMixin,
         methods=["post"],
         permission_classes=[IsAuthenticated],
         serializer_class=ImageSerializer,
-        parser_classes=[MultiPartParser, FormParser]
+        parser_classes=[MultiPartParser, FormParser],
     )
     def upload_image(self, request, pk=None):
         project = self.get_object()
 
         if request.user != project.user:
-            return Response({"detail": "You do not have permission to upload images to this project."}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {
+                    "detail": "You do not have permission to "
+                    "upload images to this project."
+                },
+                status=status.HTTP_403_FORBIDDEN,
+            )
 
         serializer = ImageSerializer(data=request.data)
         if serializer.is_valid():

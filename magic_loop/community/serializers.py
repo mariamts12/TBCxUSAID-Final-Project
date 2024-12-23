@@ -122,9 +122,9 @@ class FeedbackSerializer(serializers.ModelSerializer):
         fields = ["comment"]
 
     def create(self, validated_data):
-        user = self.context.get('user')
-        comment = validated_data['comment']
-        if self.context.get('action') == 'like':
+        user = self.context.get("user")
+        comment = validated_data["comment"]
+        if self.context.get("action") == "like":
             action_value = 1
         else:
             action_value = -1
@@ -140,4 +140,6 @@ class FeedbackSerializer(serializers.ModelSerializer):
                 feedback.save()
                 return feedback
         else:
-            return Feedback.objects.create(user=user, comment=comment, value=action_value)
+            return Feedback.objects.create(
+                user=user, comment=comment, value=action_value
+            )

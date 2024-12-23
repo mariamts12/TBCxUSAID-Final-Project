@@ -9,9 +9,14 @@ from rest_framework.viewsets import GenericViewSet
 from .filtersets import PostFilter
 from .models import Comment, Feedback, Post, Tag
 from .serializers import (
-    AddPostSerializer, PostSerializer, PostDetailSerializer,
-    AddCommentSerializer, CommentSerializer, EvaluateCommentSerializer,
-    FeedbackSerializer, TagSerializer
+    AddPostSerializer,
+    PostSerializer,
+    PostDetailSerializer,
+    AddCommentSerializer,
+    CommentSerializer,
+    EvaluateCommentSerializer,
+    FeedbackSerializer,
+    TagSerializer,
 )
 from utils.serializer_factory import SerializerFactory
 
@@ -22,12 +27,13 @@ class TagViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = TagSerializer
 
 
-class PostViewSet(mixins.CreateModelMixin,
-                  mixins.RetrieveModelMixin,
-                  mixins.ListModelMixin,
-                  mixins.DestroyModelMixin,
-                  GenericViewSet,
-                  ):
+class PostViewSet(
+    mixins.CreateModelMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    GenericViewSet,
+):
     queryset = (
         Post.objects.prefetch_related("tag", "comments", "likes")
         .select_related("author")
@@ -75,7 +81,9 @@ class PostViewSet(mixins.CreateModelMixin,
 
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
-    queryset = Comment.objects.select_related("author").order_by("-is_pinned", "-created_at")
+    queryset = Comment.objects.select_related("author").order_by(
+        "-is_pinned", "-created_at"
+    )
     permission_classes = [IsAuthenticated]
 
     serializer_class = SerializerFactory(

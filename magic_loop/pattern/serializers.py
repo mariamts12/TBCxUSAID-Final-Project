@@ -18,33 +18,19 @@ class MaterialSerializer(serializers.ModelSerializer):
 class DetailCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = [
-            "id",
-            "name",
-            "description",
-            "parent",
-            "subcategories"
-        ]
+        fields = ["id", "name", "description", "parent", "subcategories"]
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = [
-            "id",
-            "name"
-        ]
+        fields = ["id", "name"]
 
 
 class AddCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = [
-            "id",
-            "name",
-            "description",
-            "parent"
-        ]
+        fields = ["id", "name", "description", "parent"]
 
 
 class YarnTypeSerializer(serializers.ModelSerializer):
@@ -76,7 +62,7 @@ class PatternDetailSerializer(serializers.ModelSerializer):
             "created_at",
             "tags",
             "categories",
-            "materials"
+            "materials",
         ]
 
 
@@ -95,7 +81,7 @@ class PatternSerializer(serializers.ModelSerializer):
             "difficulty",
             "saved_count",
             "tags",
-            "categories"
+            "categories",
         ]
 
 
@@ -117,11 +103,16 @@ class AddPatternSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if not data.get("file") and not data.get("text_pattern"):
-            raise serializers.ValidationError("You must provide either a file or a text pattern.")
+            raise serializers.ValidationError(
+                "You must provide either a file or a text pattern."
+            )
 
         if data.get("hook_or_needle_size") and data["hook_or_needle_size"] <= 0:
             raise serializers.ValidationError(
-                {"hook_or_needle_size": "Crochet hook or Knitting needle size must be positive."}
+                {
+                    "hook_or_needle_size": "Crochet hook or Knitting "
+                    "needle size must be positive."
+                }
             )
 
         return data

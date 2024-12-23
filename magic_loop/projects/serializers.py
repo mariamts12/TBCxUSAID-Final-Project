@@ -30,32 +30,20 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "time_spent",
-            "images"
+            "images",
         ]
 
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = [
-            "id",
-            "user",
-            "name",
-            "pattern",
-            "time_spent"
-        ]
+        fields = ["id", "user", "name", "pattern", "time_spent"]
 
 
 class CreateProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = [
-            "name",
-            "description",
-            "pattern",
-            "yarn_type",
-            "hook_or_needle_size"
-        ]
+        fields = ["name", "description", "pattern", "yarn_type", "hook_or_needle_size"]
 
 
 class UpdateProjectSerializer(serializers.ModelSerializer):
@@ -69,14 +57,14 @@ class UpdateProjectSerializer(serializers.ModelSerializer):
             "hook_or_needle_size",
             "status",
             "end_date",
-            "time_spent"
+            "time_spent",
         ]
         extra_kwargs = {
-            'name': {'required': False},
+            "name": {"required": False},
         }
 
     def validate(self, data):
-        if data.get('status') == 'completed' and not data.get('end_date'):
+        if data.get("status") == "completed" and not data.get("end_date"):
             data["end_date"] = date.today()
         return data
 

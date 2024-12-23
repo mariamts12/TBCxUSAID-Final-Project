@@ -15,7 +15,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "status",
         "start_date",
         "end_date",
-        "time_spent"
+        "time_spent",
     )
     list_filter = ("status", "pattern", "user")
     list_editable = ("status", "end_date", "time_spent")
