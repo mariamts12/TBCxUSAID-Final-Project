@@ -7,11 +7,11 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from .filtersets import PostFilter
-from .models import Comment, Feedback, Post, Tag, LikePost
+from .models import Comment, Feedback, Post, Tag
 from .serializers import (
     AddPostSerializer, PostSerializer, PostDetailSerializer,
     AddCommentSerializer, CommentSerializer, EvaluateCommentSerializer,
-    FeedbackSerializer, TagSerializer, LikePostSerializer
+    FeedbackSerializer, TagSerializer
 )
 from utils.serializer_factory import SerializerFactory
 
@@ -22,13 +22,12 @@ class TagViewSet(mixins.ListModelMixin, GenericViewSet):
     serializer_class = TagSerializer
 
 
-class PostViewSet(
-    mixins.CreateModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.ListModelMixin,
-    mixins.DestroyModelMixin,
-    GenericViewSet,
-):
+class PostViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.ListModelMixin,
+                  mixins.DestroyModelMixin,
+                  GenericViewSet,
+                  ):
     queryset = (
         Post.objects.prefetch_related("tag", "comments", "likes")
         .select_related("author")
@@ -52,6 +51,27 @@ class PostViewSet(
         if self.get_object().author != request.user:
             raise PermissionDenied("You can only delete your posts.")
         return super().destroy(request, *args, **kwargs)
+
+    @action(
+        detail=True,
+        methods=["post", "delete"],
+        permission_classes=[IsAuthenticated],
+        serializer_class=None,
+        url_path="like",
+        url_name="like",
+    )
+    def like_unlike(self, request, pk=None):
+        user = request.user
+        post = self.get_object()
+        if post:
+            if request.method == "POST":
+                user.liked_posts.add(post)
+                return Response({"message": "Post liked successfully."})
+            elif request.method == "DELETE":
+                user.liked_posts.remove(post)
+                return Response({"message": "Post unliked successfully."})
+
+        return Response({"error": "Post not found."}, status=404)
 
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
@@ -109,47 +129,6 @@ class CommentViewSet(mixins.CreateModelMixin, mixins.DestroyModelMixin, GenericV
         instance = self.get_object()
         response_data = self._evaluate(instance, "unpin")
         return Response(response_data, status=status.HTTP_200_OK)
-
-
-class LikePostViewSet(GenericViewSet):
-    queryset = LikePost.objects.all()
-    permission_classes = [IsAuthenticated]
-    serializer_class = LikePostSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-    @action(
-        detail=False,
-        methods=["post"],
-        permission_classes=[IsAuthenticated],
-        url_path="like",
-        url_name="like",
-    )
-    def like(self, request):
-        serializer = LikePostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        if LikePost.objects.filter(post=serializer.validated_data["post"], user=request.user).exists():
-            return Response({"message": "You have already liked this post"}, status=status.HTTP_400_BAD_REQUEST)
-        self.perform_create(serializer)
-        return Response({"message": "Post liked successfully"}, status=status.HTTP_201_CREATED)
-
-    @action(
-        detail=False,
-        methods=["patch"],
-        permission_classes=[IsAuthenticated],
-        url_path="unlike",
-        url_name="unlike",
-    )
-    def unlike(self, request):
-        serializer = LikePostSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        instance = LikePost.objects.filter(post=serializer.validated_data["post"], user=request.user).first()
-
-        if instance:
-            instance.delete()
-            return Response({"message": "Post unliked successfully"}, status=status.HTTP_200_OK)
-        return Response({"message": "You haven't liked this post"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class FeedbackViewSet(GenericViewSet):

@@ -16,6 +16,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to='post_images/', null=True, blank=True)
     tag = models.ManyToManyField(to=Tag, related_name="posts", blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="liked_posts")
 
     @property
     def comment_count(self) -> int:
@@ -31,19 +32,6 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.id}. {self.title}"
-
-
-# class PostImage(models.Model):
-#     post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="images")
-#     image = models.ImageField(upload_to='post_images/')
-
-
-class LikePost(models.Model):
-    post = models.ForeignKey(to=Post, on_delete=models.CASCADE, related_name="likes")
-    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ("user", "post")
 
 
 class Comment(models.Model):

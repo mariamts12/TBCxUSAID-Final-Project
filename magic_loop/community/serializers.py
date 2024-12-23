@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Comment, Feedback, Post, Tag, LikePost
+from .models import Comment, Feedback, Post, Tag
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -114,12 +114,6 @@ class AddPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ["title", "content", "tag", "image"]
-
-
-class LikePostSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LikePost
-        fields = ["post"]
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
