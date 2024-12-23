@@ -1,9 +1,10 @@
 from rest_framework import mixins, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
+from pattern.serializers import PatternSerializer
 from .models import User
 from .serializers import DetailUserSerializer, UserSerializer, CreateUserSerializer
 from utils.serializer_factory import SerializerFactory
@@ -12,8 +13,7 @@ from utils.serializer_factory import SerializerFactory
 class UserViewSet(mixins.RetrieveModelMixin,
                   mixins.ListModelMixin,
                   GenericViewSet):
-    queryset = User.objects.all()
-
+    queryset = User.objects.prefetch_related("saved_patterns", "patterns")
     permission_classes = [IsAuthenticated]
 
     serializer_class = SerializerFactory(
@@ -28,10 +28,10 @@ class UserViewSet(mixins.RetrieveModelMixin,
     @action(
         detail=False,
         methods=["post"],
-        permission_classes=[],
+        permission_classes=[AllowAny],
         serializer_class=CreateUserSerializer,
-        url_path="sign_up",
-        url_name="sign_up",
+        url_path="sign-up",
+        url_name="sign-up",
     )
     def sign_up(self, request):
         serializer = CreateUserSerializer(data=request.data)

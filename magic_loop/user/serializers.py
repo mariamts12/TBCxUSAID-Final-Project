@@ -6,13 +6,13 @@ from .tasks import send_sign_up_mail
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "username", "email", "patterns_count", "saved_patterns_count"]
 
 
 class DetailUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "username", "email"]
+        fields = ["id", "username", "email", "patterns_count", "saved_patterns_count"]
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
