@@ -7,6 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
+from .tasks import send_pattern_saved_email
 
 from .filtersets import PatternFilter, BasePatternFilter
 from .models import Category, Pattern, PatternTag, Material, YarnType
@@ -87,6 +88,13 @@ class PatternViewSet(
         if pattern:
             if request.method == "POST":
                 user.saved_patterns.add(pattern)
+                if pattern.saved_count % 2 == 0:
+                    send_pattern_saved_email.delay(
+                        pattern.title,
+                        pattern.author.email,
+                        pattern.author.username,
+                        pattern.saved_count,
+                    )
                 return Response({"message": "Pattern saved successfully."})
             elif request.method == "DELETE":
                 user.saved_patterns.remove(pattern)
