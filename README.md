@@ -1,4 +1,4 @@
-# Magic Loop Platform
+# Magic Loop
 
 ## Overview
 Magic Loop is a web-based platform designed for crochet and knitting enthusiasts. The platform allows users to manage patterns, projects, and community interactions effectively. Below are the core features divided by apps:
