@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "user",
     "community",
     "pattern",
+    "projects"
 ]
 
 MIDDLEWARE = [
