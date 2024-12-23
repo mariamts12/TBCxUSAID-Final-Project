@@ -27,6 +27,7 @@ urlpatterns = [
     path("user/", include("user.urls"), name="user"),
     path("community/", include("community.urls"), name="community"),
     path("patterns/", include("pattern.urls"), name="patterns"),
+    path("projects/", include("projects.urls"), name="projects"),
     path(
         "swagger/",
         schema_view.with_ui("swagger", cache_timeout=0),

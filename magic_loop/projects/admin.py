@@ -11,7 +11,6 @@ class ProjectAdmin(admin.ModelAdmin):
         "name",
         "description",
         "pattern",
-        "yarn_type",
         "hook_or_needle_size",
         "status",
         "start_date",

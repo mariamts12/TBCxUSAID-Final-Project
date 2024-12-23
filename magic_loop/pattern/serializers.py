@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import PatternTag, Category, Pattern, Material
+from .models import PatternTag, Category, Pattern, Material, YarnType
 
 
 class PatternTagSerializer(serializers.ModelSerializer):
@@ -49,7 +49,7 @@ class AddCategorySerializer(serializers.ModelSerializer):
 
 class YarnTypeSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Material
+        model = YarnType
         fields = ["name"]
 
 
@@ -100,8 +100,6 @@ class PatternSerializer(serializers.ModelSerializer):
 
 
 class AddPatternSerializer(serializers.ModelSerializer):
-    yarn_types = YarnTypeSerializer(source="yarn_type", many=True, read_only=True)
-
     class Meta:
         model = Pattern
         fields = [
@@ -111,7 +109,7 @@ class AddPatternSerializer(serializers.ModelSerializer):
             "file",
             "text_pattern",
             "difficulty",
-            "yarn_types",
+            "yarn_type",
             "hook_or_needle_size",
             "category",
             "tag",

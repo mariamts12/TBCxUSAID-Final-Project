@@ -12,12 +12,12 @@ class Project(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     pattern = models.ForeignKey(Pattern, null=True, blank=True, on_delete=models.SET_NULL)
-    yarn_type = models.ForeignKey(to=YarnType, on_delete=models.SET_NULL, null=True)
-    hook_or_needle_size = models.CharField(max_length=50)
+    yarn_type = models.ManyToManyField(to=YarnType, related_name="projects", blank=True)
+    hook_or_needle_size = models.CharField(max_length=50, null=True, blank=True)
     status = models.CharField(max_length=20, choices=StatusChoices.choices, default=StatusChoices.IN_PROGRESS)
-    start_date = models.DateField()
+    start_date = models.DateField(auto_now_add=True)
     end_date = models.DateField(null=True, blank=True)
-    time_spent = models.DurationField(null=True, blank=True)
+    time_spent = models.DecimalField(null=True, blank=True, decimal_places=1, max_digits=5, help_text="Hours spent on project")
 
     def __str__(self):
         return self.name
