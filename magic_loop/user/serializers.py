@@ -1,6 +1,11 @@
 from rest_framework import serializers
+
+from pattern.serializers import PatternSerializer
 from .models import User
 from .tasks import send_sign_up_mail
+from community.serializers import PostSerializer
+
+from projects.serializers import ProjectSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -17,6 +22,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class DetailUserSerializer(serializers.ModelSerializer):
+    posts = PostSerializer(many=True, read_only=True)
+    patterns = PatternSerializer(many=True, read_only=True)
+    projects = ProjectSerializer(many=True, read_only=True)
+    saved_patterns = PatternSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -26,10 +36,17 @@ class DetailUserSerializer(serializers.ModelSerializer):
             "patterns_count",
             "saved_patterns_count",
             "projects_count",
+            "posts",
+            "patterns",
+            "projects",
+            "saved_patterns"
         ]
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        write_only=True, required=True, style={"input_type": "password"}
+    )
     verify_password = serializers.CharField(
         write_only=True, required=True, style={"input_type": "password"}
     )

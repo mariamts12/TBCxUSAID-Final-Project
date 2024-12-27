@@ -21,11 +21,11 @@ class ProjectAdmin(admin.ModelAdmin):
     list_editable = ("status", "end_date", "time_spent")
     sortable_by = ("time_spent",)
     search_fields = ("name", "description", "pattern__name")
-    list_per_page = 15
+    list_per_page = 10
 
 
 @admin.register(ProjectImage)
 class ProjectImageAdmin(admin.ModelAdmin):
     list_display = ("id", "project", "image")
     search_fields = ("project__name",)
-    list_per_page = 15
+    list_per_page = 10

@@ -5,9 +5,9 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Magic Loop App API",
+        title="Magic Loop API",
         default_version="v1",
-        description="Magic Loop App API",
+        description="Magic Loop API",
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

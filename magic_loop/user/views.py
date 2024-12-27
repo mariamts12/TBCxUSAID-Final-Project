@@ -10,7 +10,8 @@ from utils.serializer_factory import SerializerFactory
 
 
 class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
-    queryset = User.objects.prefetch_related("saved_patterns", "patterns", "projects")
+    queryset = User.objects.prefetch_related("saved_patterns", "patterns", "saved_patterns__tag",
+                                             "patterns__tag", "projects", "posts")
     permission_classes = [IsAuthenticated]
 
     serializer_class = SerializerFactory(
@@ -34,4 +35,8 @@ class UserViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewS
         serializer = CreateUserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({
+                    "message": "You have successfully registered!"
+                },
+            status=status.HTTP_201_CREATED
+        )

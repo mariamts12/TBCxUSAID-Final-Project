@@ -9,13 +9,7 @@ class PostAdmin(admin.ModelAdmin):
     list_filter = ("tag", "author")
     search_fields = ("title", "content")
     list_editable = ("title",)
-    list_per_page = 15
-
-
-# @admin.register(LikePost)
-# class LikePostAdmin(admin.ModelAdmin):
-#     list_display = ("user", "post")
-#     search_fields = ("post__id",)
+    list_per_page = 10
 
 
 @admin.register(Comment)
@@ -33,7 +27,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ("author", "is_pinned")
     list_editable = ("is_pinned",)
     search_fields = ("post__id",)
-    list_per_page = 15
+    list_per_page = 10
 
 
 @admin.register(Tag)
@@ -41,7 +35,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ("id", "name")
     search_fields = ("name",)
     list_editable = ("name",)
-    list_per_page = 15
+    list_per_page = 10
 
 
 @admin.register(Feedback)
@@ -50,4 +44,4 @@ class FeedbackAdmin(admin.ModelAdmin):
     list_filter = ("user", "value")
     search_fields = ("comment__id",)
     list_editable = ("value",)
-    list_per_page = 15
+    list_per_page = 10

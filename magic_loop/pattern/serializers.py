@@ -69,7 +69,6 @@ class PatternDetailSerializer(serializers.ModelSerializer):
 class PatternSerializer(serializers.ModelSerializer):
     tags = PatternTagSerializer(source="tag", many=True, read_only=True)
     categories = CategorySerializer(source="category", many=True, read_only=True)
-    # yarn_types = YarnTypeSerializer(source="yarn_type", many=True, read_only=True)
 
     class Meta:
         model = Pattern

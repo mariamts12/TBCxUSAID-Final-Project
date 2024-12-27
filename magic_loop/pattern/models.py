@@ -74,7 +74,6 @@ class Material(models.Model):
     class UnitChoices(models.TextChoices):
         GRAMS = "grams", "Grams"
         METERS = "meters", "Meters"
-        YARDS = "yards", "Yards"
         PIECES = "pieces", "Pieces"
         PAIRS = "pairs", "Pairs"
         NONE = "none", "None"

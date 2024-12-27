@@ -9,4 +9,4 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = ("is_superuser",)
     search_fields = ("username", "email")
     list_editable = ("username",)
-    list_per_page = 15
+    list_per_page = 10

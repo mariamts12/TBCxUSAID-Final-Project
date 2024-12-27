@@ -18,7 +18,7 @@ class BasePatternFilter(django_filters.FilterSet):
         choices=Pattern.DifficultyChoices.choices,
         label="Difficulty",
     )
-    popular = django_filters.OrderingFilter(field_name="count_saved", label="Popular")
+    popular = django_filters.OrderingFilter(fields=(("count_saved", "popular"),), label="Popular")
 
     class Meta:
         model = Pattern

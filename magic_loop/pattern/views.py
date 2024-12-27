@@ -21,6 +21,8 @@ from .serializers import (
 )
 from utils.serializer_factory import SerializerFactory
 
+SAVED_MILESTONE = 2
+
 
 class PatternTagViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, GenericViewSet):
     queryset = PatternTag.objects.order_by("id")
@@ -76,7 +78,7 @@ class PatternViewSet(
     @action(
         detail=True,
         methods=["post", "delete"],
-        permission_classes=[],
+        permission_classes=[IsAuthenticated],
         serializer_class=None,
         pagination_class=None,
         url_path="save",
@@ -88,7 +90,7 @@ class PatternViewSet(
         if pattern:
             if request.method == "POST":
                 user.saved_patterns.add(pattern)
-                if pattern.saved_count % 2 == 0:
+                if pattern.saved_count % SAVED_MILESTONE == 0:
                     send_pattern_saved_email.delay(
                         pattern.title,
                         pattern.author.email,
@@ -105,7 +107,7 @@ class PatternViewSet(
     @action(
         detail=False,
         methods=["get"],
-        permission_classes=[],
+        permission_classes=[IsAuthenticated],
         filterset_class=BasePatternFilter,
         url_path="saved-patterns",
         url_name="saved-patterns",
